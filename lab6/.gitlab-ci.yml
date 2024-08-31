@@ -1,0 +1,28 @@
+include:
+  - project: 'devops2695307/devopslabs/gitlab-includes'
+    file: 'docker-build.yml'
+
+stages:
+  - build
+  
+  
+backend-build:
+  stage: build
+  extends: .docker-build
+  variables:
+    DOCKERFILE_DIR: 'spring-backend'
+    DOCKER_IMAGE_NAME: '${CI_REGISTRY_IMAGE}/spring-backend'   
+
+frontend-build:
+  stage: build
+  extends: .docker-build
+  variables:
+    DOCKERFILE_DIR: 'react-frontend'
+    DOCKER_IMAGE_NAME: '${CI_REGISTRY_IMAGE}/react-frontend'   
+
+nginx-build:
+  stage: build
+  extends: .docker-build
+  variables:
+    DOCKERFILE_DIR: 'nginx'
+    DOCKER_IMAGE_NAME: '${CI_REGISTRY_IMAGE}/proxy-nginx'   

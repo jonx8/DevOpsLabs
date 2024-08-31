@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  nginx:
+    build: .
+    image: custom_nginx:alpine
+    container_name: alpine-nginx
+    ports:
+      - 3000:80
+    restart: on-failure
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./static:/usr/share/nginx/html
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:
+    name: nginx-network
+    driver: bridge
+

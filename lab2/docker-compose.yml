@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+    db:
+      image: postgres:16
+      container_name: postgres
+      environment:
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_NAME}
+      restart: on-failure
+      expose:
+        - 5432
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      networks:
+        - django-search-net
+
+
+    django:
+      image: django-search
+      build: .
+      container_name: django
+      restart: on-failure
+      volumes:
+        - ./django-search:/app
+      ports:
+        - "8000:8000"
+      environment:
+        DB_NAME: ${DB_NAME}
+        DB_USER: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_PORT: ${DB_PORT}
+        DB_HOST: db
+        DEBUG: True
+      depends_on:
+        - db
+      networks:
+        - django-search-net
+
+
+volumes:
+  postgres_data:
+    name: postgres_data
+
+networks:
+  django-search-net:
+    name: django-search-net

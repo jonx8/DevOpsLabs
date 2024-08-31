@@ -1,0 +1,5 @@
+FROM alpine:3.19.1
+
+# Install node.js
+RUN apk add nodejs npm --update --no-cache
+
